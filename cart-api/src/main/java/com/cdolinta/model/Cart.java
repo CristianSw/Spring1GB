@@ -1,4 +1,4 @@
-package model;
+package com.cdolinta.model;
 
 import java.util.ArrayList;
 import java.util.Collections;

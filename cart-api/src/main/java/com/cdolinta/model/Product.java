@@ -1,4 +1,4 @@
-package model;
+package com.cdolinta.model;
 
 public class Product {
     private Long id;

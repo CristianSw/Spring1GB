@@ -1,6 +1,6 @@
-package repository;
+package com.cdolinta.repository;
 
-import model.Product;
+import com.cdolinta.model.Product;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

@@ -1,8 +1,8 @@
-package services;
+package com.cdolinta.services;
 
-import model.Product;
+import com.cdolinta.repository.ProductRepository;
+import com.cdolinta.model.Product;
 import org.springframework.stereotype.Service;
-import repository.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;

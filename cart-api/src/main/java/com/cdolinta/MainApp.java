@@ -1,6 +1,8 @@
+package com.cdolinta;
+
+import com.cdolinta.services.CartService;
+import com.cdolinta.services.ProductService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import services.CartService;
-import services.ProductService;
 
 import java.util.Scanner;
 

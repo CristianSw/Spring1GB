@@ -1,7 +1,7 @@
-package services;
+package com.cdolinta.services;
 
-import model.Cart;
-import model.Product;
+import com.cdolinta.model.Cart;
+import com.cdolinta.model.Product;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
