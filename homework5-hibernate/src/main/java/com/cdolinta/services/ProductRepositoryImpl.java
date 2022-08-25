@@ -2,10 +2,10 @@ package com.cdolinta.services;
 
 import com.cdolinta.model.Product;
 import com.cdolinta.repository.ProductRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepository {
