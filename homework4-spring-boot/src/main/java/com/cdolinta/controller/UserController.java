@@ -21,13 +21,12 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping
-    public String listPage(@RequestParam Optional<String> usernameFilter, Model model) {
-        if (usernameFilter.isEmpty() || usernameFilter.get().isBlank()) {
-            model.addAttribute("users", userRepository.findAll());
-        } else {
-            model.addAttribute("users", userRepository.findAllByUsernameLike
-                    ("%" + usernameFilter.get() + "%"));
-        }
+    public String listPage(@RequestParam(required = false) String usernameFilter,
+                           @RequestParam(required = false) String emailFilter,
+                           Model model) {
+        usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
+        emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
+       model.addAttribute("users", userRepository.usersByFilter(usernameFilter,emailFilter));
         return "user";
     }
 
