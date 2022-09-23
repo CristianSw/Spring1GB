@@ -32,9 +32,6 @@ public class User {
     @Column(nullable = false, length = 1024)
     private String password;
 
-    @Transient
-    private String matchingPassword;
-
     public User(String username) {
         this.username = username;
     }

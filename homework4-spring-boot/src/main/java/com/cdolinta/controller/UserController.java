@@ -1,7 +1,9 @@
 package com.cdolinta.controller;
 
+import com.cdolinta.model.QUser;
 import com.cdolinta.model.User;
 import com.cdolinta.repository.UserRepository;
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,13 +22,32 @@ public class UserController {
 
     private final UserRepository userRepository;
 
+//    @GetMapping
+//    public String listPage(@RequestParam(required = false) String usernameFilter,
+//                           @RequestParam(required = false) String emailFilter,
+//                           Model model) {
+//        usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
+//        emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
+//        model.addAttribute("users", userRepository.usersByFilter(usernameFilter, emailFilter));
+//        return "user";
+//    }
+
     @GetMapping
     public String listPage(@RequestParam(required = false) String usernameFilter,
                            @RequestParam(required = false) String emailFilter,
                            Model model) {
-        usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
-        emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
-       model.addAttribute("users", userRepository.usersByFilter(usernameFilter,emailFilter));
+        QUser user = QUser.user;
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        if (usernameFilter != null && !usernameFilter.isBlank()){
+            predicate.and(user.username.contains(usernameFilter.trim()));
+        }
+
+        if (emailFilter != null && !emailFilter.isBlank()){
+            predicate.and(user.email.contains(emailFilter.trim()));
+        }
+        model.addAttribute("users", userRepository.findAll(predicate));
+
         return "user";
     }
 
