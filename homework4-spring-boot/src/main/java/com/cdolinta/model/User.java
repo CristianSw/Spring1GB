@@ -19,20 +19,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    @NotBlank(message = "can not be empty!!!")
     @Column(nullable = false, unique = true)
     private String username;
 
-    //    @NotBlank
-    //    @Email
     @Column(nullable = false, unique = true)
     private String email;
 
-    //    @Pattern(regexp = "^(?=.*?[0-9])(?=.*?[A-Z]).{8,}$", message = "Password too simple")
+
     @Column(nullable = false, length = 1024)
     private String password;
 
     public User(String username) {
         this.username = username;
+    }
+
+    public User(Long id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 }

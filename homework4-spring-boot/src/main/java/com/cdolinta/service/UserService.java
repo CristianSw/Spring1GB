@@ -3,6 +3,7 @@ package com.cdolinta.service;
 import com.cdolinta.model.QUser;
 import com.cdolinta.model.User;
 import com.cdolinta.model.dto.UserDto;
+import com.cdolinta.model.mapper.UserDtoMapper;
 import com.cdolinta.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
@@ -17,38 +18,32 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserDtoMapper mapper;
 
-    public List<UserDto> findAllByFilter(String usernameFilter, String emailFilter){
+    public List<UserDto> findAllByFilter(String usernameFilter, String emailFilter) {
         QUser user = QUser.user;
         BooleanBuilder predicate = new BooleanBuilder();
 
-        if (usernameFilter != null && !usernameFilter.isBlank()){
+        if (usernameFilter != null && !usernameFilter.isBlank()) {
             predicate.and(user.username.contains(usernameFilter.trim()));
         }
 
-        if (emailFilter != null && !emailFilter.isBlank()){
+        if (emailFilter != null && !emailFilter.isBlank()) {
             predicate.and(user.email.contains(emailFilter.trim()));
         }
-        return StreamSupport.stream(userRepository.findAll(predicate).spliterator(),true)
-                .map(userFromDb -> {
-                    UserDto dto = new UserDto();
-                    dto.setId(userFromDb.getId());
-                    dto.setUsername(userFromDb.getUsername());
-                    dto.setEmail(dto.getEmail());
-                    dto.setPassword(dto.getPassword());
-                    return dto;
-                }).collect(Collectors.toList());
+        return StreamSupport.stream(userRepository.findAll(predicate).spliterator(), true)
+                .map(mapper::map).collect(Collectors.toList());
     }
 
-    public Optional<UserDto> findUserById(Long id){
-        return userRepository.findById(id).map(UserService::userToUserDto);
+    public Optional<UserDto> findUserById(Long id) {
+        return userRepository.findById(id).map(mapper::map);
     }
 
-    public UserDto save(UserDto dto){
-        userRepository.save(new User(dto.getId(),dto.getUsername(), dto.getEmail(), dto.getPassword()));
+    public void save(UserDto dto) {
+        userRepository.save(mapper.map(dto));
     }
 
-    public static UserDto userToUserDto(User user){
-        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 }
