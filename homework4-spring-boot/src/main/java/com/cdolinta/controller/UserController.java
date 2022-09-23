@@ -37,19 +37,28 @@ public class UserController {
     @GetMapping
     public String listPage(@RequestParam(required = false) String usernameFilter,
                            @RequestParam(required = false) String emailFilter,
+                           @RequestParam(required = false) Optional<Integer> page,
+                           @RequestParam(required = false) Optional<Integer> size,
                            Model model) {
-        QUser user = QUser.user;
-        BooleanBuilder predicate = new BooleanBuilder();
+//        QUser user = QUser.user;
+//        BooleanBuilder predicate = new BooleanBuilder();
+//
+//        if (usernameFilter != null && !usernameFilter.isBlank()) {
+//            predicate.and(user.username.contains(usernameFilter.trim()));
+//        }
+//
+//        if (emailFilter != null && !emailFilter.isBlank()) {
+//            predicate.and(user.email.contains(emailFilter.trim()));
+//        }
+//        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter, page, size));
 
-        if (usernameFilter != null && !usernameFilter.isBlank()) {
-            predicate.and(user.username.contains(usernameFilter.trim()));
-        }
+        Integer pageValue = page.orElse(1) - 1;
+        Integer sizeValue = size.orElse(3);
 
-        if (emailFilter != null && !emailFilter.isBlank()) {
-            predicate.and(user.email.contains(emailFilter.trim()));
-        }
-        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter));
+        usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
+        emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
 
+        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue));
         return "user";
     }
 
