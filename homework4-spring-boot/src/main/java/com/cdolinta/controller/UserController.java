@@ -3,9 +3,9 @@ package com.cdolinta.controller;
 import com.cdolinta.model.QUser;
 import com.cdolinta.model.User;
 import com.cdolinta.model.dto.UserDto;
-import com.cdolinta.repository.UserRepository;
+
 import com.cdolinta.service.UserService;
-import com.querydsl.core.BooleanBuilder;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

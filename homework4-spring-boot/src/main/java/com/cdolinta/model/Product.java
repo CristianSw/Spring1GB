@@ -1,24 +1,33 @@
 package com.cdolinta.model;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
+@Entity
+@Table(name = "products")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "Can not be EMPTY !")
+    @Column(nullable = false)
     private String title;
 
-    @NotBlank(message = "Can not be EMPTY !")
+    @Column(nullable = false)
     private String description;
-
-    @Min(0)
-    @Max(999)
+    @Column(nullable = false)
     private Integer price;
+
+    public Product(Long id, String title, String description, Integer price) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
 }
