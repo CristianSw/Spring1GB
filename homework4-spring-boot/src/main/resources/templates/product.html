@@ -62,6 +62,24 @@
         </tbody>
       </table>
     </div>
+      <!--    pagination-->
+      <div th:unless="${products.isEmpty()}" class="col-12">
+          <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+
+                <li th:each="num : ${#numbers.sequence(1, products.totalPages)}"
+                    th:classappend="${num == products.number + 1} ? 'active'"
+                    class="page-item">
+                  <a class="page-link" th:href="@{/product(page=${num}, size=${products.size})}">[[$num]]
+                    <span th:if="${num == products.number + 1}" class="sr-only">(current)</span>
+                  </a>
+                </li>
+
+                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+          </nav>
+      </div>
   </div>
 </div>
 

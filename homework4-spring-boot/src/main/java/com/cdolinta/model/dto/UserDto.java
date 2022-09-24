@@ -1,5 +1,6 @@
-package com.cdolinta.model;
+package com.cdolinta.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,28 +13,22 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class UserDto {
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "can not be empty!!!")
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Email
     private String email;
 
-
-    @Column(nullable = false, length = 1024)
+    @Pattern(regexp = "^(?=.*?[0-9])(?=.*?[A-Z]).{8,}$", message = "Password too simple")
     private String password;
+    private String matchingPassword;
 
-    public User(String username) {
-        this.username = username;
-    }
-
-    public User(Long id, String username, String email, String password) {
+    public UserDto(Long id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
