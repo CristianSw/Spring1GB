@@ -1,7 +1,5 @@
 package com.cdolinta.controller;
 
-import com.cdolinta.model.QUser;
-import com.cdolinta.model.User;
 import com.cdolinta.model.dto.UserDto;
 
 import com.cdolinta.service.UserService;
@@ -39,6 +37,7 @@ public class UserController {
                            @RequestParam(required = false) String emailFilter,
                            @RequestParam(required = false) Optional<Integer> page,
                            @RequestParam(required = false) Optional<Integer> size,
+                           @RequestParam(required = false) Optional<String> sortField,
                            Model model) {
 //        QUser user = QUser.user;
 //        BooleanBuilder predicate = new BooleanBuilder();
@@ -54,11 +53,12 @@ public class UserController {
 
         Integer pageValue = page.orElse(1) - 1;
         Integer sizeValue = size.orElse(3);
+        String sortFieldValue = sortField.filter(s -> !s.isBlank()).orElse("id");
 
         usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
         emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
 
-        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue));
+        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue, sortFieldValue));
         return "user";
     }
 

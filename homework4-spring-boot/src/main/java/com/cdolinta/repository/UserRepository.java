@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
             and (:emailFilter is null or u.email like :emailFilter)
             """,
             countQuery = """
-            select count (*) from users u 
+            select count(*) from users u 
             where (:usernameFilter is null or u.username like :usernameFilter) 
             and (:emailFilter is null or u.email like :emailFilter)
             """,
