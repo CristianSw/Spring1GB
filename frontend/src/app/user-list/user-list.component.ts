@@ -22,4 +22,8 @@ export class UserListComponent implements OnInit {
       })
   }
 
+  delete(id:number | null){
+
+  }
+
 }
