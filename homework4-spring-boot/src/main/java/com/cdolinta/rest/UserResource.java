@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class UserResource {
     private final UserService service;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/id")
     public UserDto form(@PathVariable("id") long id, Model model) {
         UserDto userDto = service.findUserById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userDto;
@@ -45,12 +44,17 @@ public class UserResource {
     }
 
 
+    @PutMapping
+    public UserDto updateUser(@RequestBody UserDto dto) {
+            service.save(dto);
+        return dto;
+    }
     @PostMapping
     public UserDto saveUser(@RequestBody UserDto dto) {
         if (dto.getId() != null){
             throw new RuntimeException("Created user shouldn't have ID");
         }
-            service.save(dto);
+        service.save(dto);
         return dto;
     }
 
