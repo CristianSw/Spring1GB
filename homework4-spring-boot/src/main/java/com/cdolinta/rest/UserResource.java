@@ -25,7 +25,7 @@ public class UserResource {
 
 
     @GetMapping
-    public List<UserDto> listPage(@RequestParam(required = false) String usernameFilter,
+    public Page<UserDto> listPage(@RequestParam(required = false) String usernameFilter,
                                   @RequestParam(required = false) String emailFilter,
                                   @RequestParam(required = false) Optional<Integer> page,
                                   @RequestParam(required = false) Optional<Integer> size,
@@ -39,8 +39,9 @@ public class UserResource {
         emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
 
         Page<UserDto> allByFilter = service.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue, sortFieldValue);
-        List<UserDto> users = allByFilter.get().toList();
-        return users;
+//        List<UserDto> users = allByFilter.get().toList();
+//        return users;
+        return allByFilter;
     }
 
 
