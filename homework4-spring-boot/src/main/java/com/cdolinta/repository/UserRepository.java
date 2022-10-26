@@ -9,6 +9,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
@@ -27,5 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
             """,
             nativeQuery = true)
     Page<User> usersByFilter(String usernameFilter, String emailFilter, Pageable pageable);
+
+    Optional<User> findByUsername(String username);
 
 }
