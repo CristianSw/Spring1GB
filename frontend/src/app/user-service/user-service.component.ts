@@ -12,7 +12,7 @@ export class UserServiceComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   public findAll(){
-    return this.http.get<Page>("http://localhost:8090/api/v1/user")
+    return this.http.get<Page>("api/v1/user")
   }
 
   ngOnInit(): void {
