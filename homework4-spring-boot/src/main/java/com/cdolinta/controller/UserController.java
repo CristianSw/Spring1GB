@@ -1,13 +1,13 @@
 package com.cdolinta.controller;
 
-import com.cdolinta.model.QUser;
-import com.cdolinta.model.User;
 import com.cdolinta.model.dto.UserDto;
 
+import com.cdolinta.service.RoleService;
 import com.cdolinta.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +22,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
+    private final RoleService roleService;
 
 //    @GetMapping
 //    public String listPage(@RequestParam(required = false) String usernameFilter,
@@ -39,6 +40,7 @@ public class UserController {
                            @RequestParam(required = false) String emailFilter,
                            @RequestParam(required = false) Optional<Integer> page,
                            @RequestParam(required = false) Optional<Integer> size,
+                           @RequestParam(required = false) Optional<String> sortField,
                            Model model) {
 //        QUser user = QUser.user;
 //        BooleanBuilder predicate = new BooleanBuilder();
@@ -54,32 +56,35 @@ public class UserController {
 
         Integer pageValue = page.orElse(1) - 1;
         Integer sizeValue = size.orElse(3);
+        String sortFieldValue = sortField.filter(s -> !s.isBlank()).orElse("id");
 
         usernameFilter = usernameFilter == null || usernameFilter.isBlank() ? null : "%" + usernameFilter.trim() + "%";
         emailFilter = emailFilter == null || emailFilter.isBlank() ? null : "%" + emailFilter.trim() + "%";
 
-        model.addAttribute("users", service.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue));
+        model.addAttribute("users", userService.findAllByFilter(usernameFilter, emailFilter, pageValue, sizeValue, sortFieldValue));
         return "user";
     }
 
     @GetMapping("/{id}")
     public String form(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", service.findUserById(id));
+        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("user", userService.findUserById(id).orElseThrow(() -> new RuntimeException("User not found !!!")));
         return "user_form";
     }
 
     @GetMapping("/new")
     public String addNewUser(Model model) {
+        model.addAttribute("roles", roleService.findAll());
         model.addAttribute("user", new UserDto());
         return "user_form";
     }
-
+    @Secured("ROLE_SUPER_ADMIN")
     @GetMapping("/delete/{id}")
     public String deleteUserById(@PathVariable long id) {
-        service.deleteUserById(id);
+        userService.deleteUserById(id);
         return "redirect:/user";
     }
-
+    @Secured("ROLE_SUPER_ADMIN")
     @PostMapping
     public String saveUser(@Valid @ModelAttribute(value = "user") UserDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -88,13 +93,13 @@ public class UserController {
         if (!dto.getPassword().equals(dto.getMatchingPassword())) {
             bindingResult.rejectValue("password", "Password dont match");
         }
-        service.save(dto);
+        userService.save(dto);
         return "redirect:/user";
     }
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute(value = "user") UserDto dto) {
-        service.save(dto);
+        userService.save(dto);
         return "redirect:/user";
     }
 

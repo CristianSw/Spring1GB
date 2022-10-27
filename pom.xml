@@ -13,6 +13,8 @@
         <module>mvc-api</module>
         <module>cart-api</module>
         <module>homework4-spring-boot</module>
+        <module>homework5-hibernate</module>
+        <module>lesson10</module>
     </modules>
 
     <properties>

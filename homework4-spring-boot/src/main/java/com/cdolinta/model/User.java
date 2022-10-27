@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,9 +30,13 @@ public class User {
     @Column(nullable = false, length = 1024)
     private String password;
 
+    @ManyToMany
+    private Set<Role> roles;
+
     public User(String username) {
         this.username = username;
     }
+
 
     public User(Long id, String username, String email, String password) {
         this.id = id;
